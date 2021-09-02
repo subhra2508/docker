@@ -1,0 +1,13 @@
+assignment : manage multiple container
+
+run a nginx , a mysql, and a httpd(apache) server
+run all of them --detach or (-d) ,name them with --name
+nginx should listen on 80:80,httpd on 8080:80, mysql on 3306:3306
+when running mqsql,use the --env option(-e) to pass in MYSQL_RANDOM_ROOT_PASSWORD=yes
+use docker container logs on mysql to find the random password it created on startup
+clean it all up with docker container stop and docker container rm (both can accept multiple names or id's)
+use docker container ls to ensure everything is correct before and after cleanup
+GENERATED ROOT PASSWORD: aingaiBouyoo3hahzu2zai9ohbahf4ai
+
+
+

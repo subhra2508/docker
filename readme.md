@@ -11,7 +11,7 @@
 - create   -     Create a new container
 - diff     -     Inspect changes to files or directories on a container's filesystem
 - events   -    Get real time events from the server
-- exec     -    Run a command in a running container
+- exec     -    Run a command in a running container (docker exec -it image_id /bin/bash)
 - export   -    Export a container's filesystem as a tar archive
 - history  -    Show the history of an image
 - images   -   List images
@@ -45,6 +45,44 @@
 - version  -  Show the Docker version information
 - wait     -   Block until one or more containers stop, then print their exit codes
 
+- docker -d(for detached mode) -p(port no)yourport:dockerport --name(name your container) 
+
+next runing an apache webserver
+sudo docker container run -d --name webserver -p 8080:80  httpd
+
+- docker container top - process list in one container
+
+- docker container inspect - details of one container config
+
+- docker container stats - performance stats for all containers
+
+- docker container run -it - start new container interactively
+
+- docker container exec -it - run additional command in existing container
+
+- alpine is ideal for container images its less in size about 4mb
+
+# DOCKER NETWORKS: CONCEPT
+
+- Each container connected to a private virtual network "bridge"
+- Each virtual network routes through NAT firewall on host ip
+- All containers on a virtual network can talk to each other without -p
+
+- Best practice is to create a new virtual network for each app:
+	- network "my_web_app" for mysql and php/apache containers
+	- network "my_api" for mongo and nodejs containers
+
+- "Batteries included,But Removable"
+	- Defaults work well in many cases,but easy to swap out parts to customize it
+
+- make new virtula networks
+
+- Attach containers to more then one virtual network(or none)
+
+- skip virtual network and use host ip(--net=host)
+- use different Docker network drivers to gain new abilites
+
+- docker container inspect --format '{{.NetworkSettings.IPAddress }}' webhost
 
 
 ### Learning >>>
