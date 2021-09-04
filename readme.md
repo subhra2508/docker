@@ -84,6 +84,32 @@ sudo docker container run -d --name webserver -p 8080:80  httpd
 
 - docker container inspect --format '{{.NetworkSettings.IPAddress }}' webhost
 
+# Docker Networks: CLI management
+
+- show networks - docker network ls
+	--network bridge - Default docker virtual network, which is NAT'ed behind host ip
+	--network host - it gains performance by skipping virtual networks but sacrifices
+	  security of container model
+	--removes eth0 and only leaves you with localhost interface in container
+	--network driver Built-in or 3rd party extension that give you virtual network 
+	  features	
+	
+- inspect a network - docker network inspect
+- create a network - docker network create --driver
+- attach a network to container - docker network connect
+- detach a network from container - docker network disconnect
+
+- docker network connect - Dynamically creates a NIC in a container on an existing virtual network.
+
+# Docker Networks:DNS
+- Understand how DNS work is the key to easy inter-container comms
+- see how it works by default with custom networks
+- Learn how to use --link to enable DNS on default bridge network
+- "Docker DNS" Docker daemon has a built-in DNS server that container use by default
+
+### Foget IP's
+- static ip's and using ip's for talking to containers is an anti-pattern.Do your best to avoid it.
+
 
 ### Learning >>>
 

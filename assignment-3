@@ -1,0 +1,17 @@
+assignment requirements:DNS RR Test
+
+- know how to use -it to get shell in container
+- understand basics of what a linux distribution is like ubuntu and centOS
+- know how to run a container
+- understand basics of DNS records
+
+
+DNS RR TEST:
+- ever since docker engine 1.11 , we can have multiple containers on a created network respond to the same DNS address
+- create a new virtual network(default bridge driver)
+- create two containers from elasticsearch:2 image
+- research and use --network-alias search when creating them to give them an additional DNS name to respond to
+- run alpine nslookup search with --net to see the two containers list for the same DNS name
+
+- run centos curl -s search:9200 with --net multiple times until you see both "name" fields show
+
