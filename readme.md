@@ -138,7 +138,12 @@ sudo docker container run -d --name webserver -p 8080:80  httpd
 - How to upload to docker hub
 
 - Usage:  docker image tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
-
+- docker image tag nginx subhrajyoti/nginx
+- docker image tag nginx subhrajyoti/nginx subhrajyoti/nginx:testing ->additional tag
+- docker image push
+- docker login - login for hub
+- docker logout - logout for hub
+- 
 
 ### Learning >>>
 
