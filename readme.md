@@ -110,6 +110,35 @@ sudo docker container run -d --name webserver -p 8080:80  httpd
 ### Foget IP's
 - static ip's and using ip's for talking to containers is an anti-pattern.Do your best to avoid it.
 
+### what's In An Image(And what isn't):
+- app binaries and dependencies(becoz the host os provides the kernal and all)
+- metadata about the image data and how to run the image
+- Official definition:"an image is an ordered collection of root filesystem changes and the corresponding execution parameters for use within a container runtime."
+- Not a complete os.No kernal,kernal modules (e.g drivers)
+- docker history nginx => gives all the detailed history of that images and it's layers
+
+- docker image inspect => return json metadata about the image(basically how images is expect to be run)
+
+### important
+- images are made up of file system changes and metadata
+- Each layer is uniquely identified and only stored once on a host
+- This save storage space on host and transfer time on push/pull
+- A container is just a single read/write layer on top of image
+- docker image history and inspect commands can teach use
+
+### notes
+- image layer
+- union file system
+- history and inspect commands
+- copy on write
+
+### image tagging and pushing to docker hub
+
+- all about image tags
+- How to upload to docker hub
+
+- Usage:  docker image tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+
 
 ### Learning >>>
 
