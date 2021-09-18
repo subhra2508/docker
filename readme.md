@@ -146,18 +146,7 @@ sudo docker container run -d --name webserver -p 8080:80  httpd
 
 
 ### The Dockerfile basics
-
 - 
-
-
-
-
-
-
-
-
-
-
 
 ### Learning >>>
 
