@@ -148,6 +148,16 @@ sudo docker container run -d --name webserver -p 8080:80  httpd
 ### The Dockerfile basics
 - 
 
+### container lifetime and persistent data :
+
+- container are usually immutable and ephemeral
+- 
+
+
+
+
+
+
 ### Learning >>>
 
 - How to start using docker
