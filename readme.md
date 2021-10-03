@@ -217,6 +217,12 @@ networks: # Optional, same as docker network create
 - two most common commands are
   - docker-compose up
   - docker-compose down
+  
+#### using compose to Build
+- compose can also build your custom images
+- will build them with docker-compose up if not found in cache
+- also rebuild with docker-compose build
+- Great for complex builds that have lots of vars or build args
 
 
 
