@@ -151,10 +151,72 @@ sudo docker container run -d --name webserver -p 8080:80  httpd
 ### container lifetime and persistent data :
 
 - container are usually immutable and ephemeral
-- 
+- "immutable infrastructure": only re-deploy container,never change
+- This is ideal scenario,but what about databases, or unique data ?
+- Docker give us features to ensure these "separation of concern"
+- this is know as "persistent data"
+- two ways : volumes and Bind mounts
+- volumes: make special location outside of container ufs
+- Bind Mounts : link container path to host path
+- Named volumes:
+	- friendly way to assign vols to containers
+	- named volumes start with -v tag with name and semicolon
+	- docker container run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=True -v mysql-db:/var/lib/mysql mysql
+	- docker volume ls : list out all the volumes
+	- docker volume mysql-db inspect : inspect the volume
+- docker volume Create:
+	- create volume ahead of time (not necessary for local development)
 
+### Persistent Data:Bind Mounting
 
+- maps a host file or directory to a container file or directory
+- Basically just two locations pointing to the same files
+- Again,it skips UFS, and host files overwrite any in container
+- bind mount are host specific so you can't use these in dockerfile , you can only use it in
+runtime ,container run
+- paths:
+	- ... run -v /Users/bret/stuff:/path/container (linux/mac)
+	- ... run -v //c/Users/bret/stuff:/path/container (windows)
+	
 
+### Docker compose 
+- configure relationships between containers
+- save our docker container run settings in easy-to-read file
+- create one-liner developer enviroment startups
+- It comprised of 2 separate but related things:
+- 1.YAML-formatted file that describes our solution options for:
+   - containers
+   - networks
+   - volumes
+- 2. A CLI tool docker-compose used for local dev/test automation with those YAML files
+#### docker-compose.yml
+- compose YAML format has it's own versions:1,2,2.1,3,3.1
+- YAML file can be used with docker-compose command for local docker automation or...
+- with docker directly in production with swarm (as of v1.13)
+- docker-compose --help
+- docker-compose.yml is default filename,but any filename can be used with docker-compose -f
+
+```yml
+version: '3.1'  # if no version is specified then v1 is assumed. Recommend v2 minimum
+
+services:  # containers. same as docker run
+  servicename: # a friendly name. this is also DNS name inside network
+    image: # Optional if you use build:
+    command: # Optional, replace the default CMD specified by the image
+    environment: # Optional, same as -e in docker run
+    volumes: # Optional, same as -v in docker run
+  servicename2:
+
+volumes: # Optional, same as docker volume create
+
+networks: # Optional, same as docker network create
+```
+#### docker-compose cli
+- cli tool come with docker for windows/mac,but separate download for linux
+- not a production-grade tool but ideal for local development and test
+- two most common commands are
+  - docker-compose up
+  - docker-compose down
 
 
 
