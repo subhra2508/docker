@@ -182,7 +182,7 @@ runtime ,container run
 ### Docker compose 
 - configure relationships between containers
 - save our docker container run settings in easy-to-read file
-- create one-liner developer enviroment startups
+- create one-linear developer enviroment startups
 - It comprised of 2 separate but related things:
 - 1.YAML-formatted file that describes our solution options for:
    - containers
@@ -223,6 +223,67 @@ networks: # Optional, same as docker network create
 - will build them with docker-compose up if not found in cache
 - also rebuild with docker-compose build
 - Great for complex builds that have lots of vars or build args
+
+### Swarm Mode : Built-In Orchestration
+
+container Everywhere = new problems
+
+- How do we automate container lifecycle ?
+- How can we easily scale out/in/up/down ?
+- how can we ensure our container are re-created if they fail?
+- how can we  replace container without downtime (blue/green deploy)?
+- how can we control/track where containers get started ?
+- how can we create cross-node virtual networks?
+- how can we ensure only trusted servers run our containers?
+- how can we store secrets,keys,passwords and get them to the right container(and only that 
+container)?
+
+
+- swarm mode is a clustering solution built inside docker
+- not related to swarm "classic" for pre-1.12 versions
+- added in 1.12(summer 2016) via swarmkit toolkit
+- enhanced in 1.13(january 2017) via stacks and screts
+- not enabled by default, new commands once enabled
+   - docker swarm
+   - docker node
+   - docker service
+   - docker stack
+   - docker secret
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
