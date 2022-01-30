@@ -250,41 +250,86 @@ container)?
    - docker stack
    - docker secret
 
+### Docker swarm
+- first to check whether swarm is active or not run command -> docker info
+- to active swarm -> docker swarm init
+- so what happened when you run this
+   - Lots of PKI and security automation
+        - root signing certificate created for our swarm
+        - certificate is issued for first manager node
+        - join tokens are created
+   - Raft database created to store root CA,configs and secrets
+        - encrypted by default on disk(1.13+)
+        - no need for another key/value system to hold orchestration/secrets
+        - replicates logs amongst manager via mutual TLS in "control panel"
+
+- docker node --help ->check what you can do with a node
+- docker swarm --help -> other helps regarding swarm
+- docker swarm init --advertise-addr <MANAGER-IP> -> to create a manager node 
+- docker service create alpine ping 8.8.8.8 -> this create a service which ping to google dns
+- docker service ls -> list out the services currently running with their replicas ex: 1/1
+- docker service ps <service name> -> this gives us the container which are running in this service
+- docker service update <ID> --replicas 3 ->Inorder to scale a service up with restart the previous ones
+
+- docker container rm -f <container_name> -> to remove a container,as soon as we remove the container the docker swarm launch a another container to replace it , because we gave replicas of 3
+
+### create a 3 node swarm cluster
+
+- docker swarm --adevertise-addr <manager-ip> -> to make this node manager / return a manager token to join other node into the network
+- docker swarm join --token SWMTKN-1-3y1i626h6bxrsi751zao7nzn8izo78og20rxlttq12xr8dw4hn-b65mjctl8ytny9ruc2cobk1dm 192.168.0.28:2377
+- docker swarm join-token manager -> inorder to join a worker as a manager 
+
+- docker service create --replicas 3 alpine ping 8.8.8.8
+### overlay multi-host networking
+- --driver overlay -> when creating network (basically it will create a swarm wide virtual network bridge so we don't have to mess with the network config) 
+- For container-to-container traffic inside a single swarm 
+- optional IpSec (AES) inorder to incryption on network
+- each service can be connected to multiple network (e.g front-end,backend)
+
+- docker network create --driver overlay mydrupal -> create a virtual network bridge
+- docker service create --name psql --network mydrupal -e POSTGRES_PASSWORD=mypass postgres -> to create postgres service
+
+- docker service ps psql -> check the running node/details
+- docker container logs psql.1.skdjfalskd
+- docker service create --name drupal --network mydrupal -p 80:80 drupal
+- docker service ls -> check all the services
+- docker service ps mydrupal -> check it's running on a worker node
+- if you are using docker play click on the port80 to show your webapp
+
+### Routing mesh
+- now if you go to any of the ip address you show the drupal is running
+- but we know that the drupal service is only running on node-3
+- this magic is due to the routing mesh
+	- routes ingress(incoming packets for a service to proper task
+	- spans all nodes in swarm
+	- uses ipvs from linux kernal
+	- load balance swarm services across their tasks
+	- basically it scaning all the nodes and send it to the node
+- two ways this works:
+- when the frontend talking to backend it's not directly talking to backend , it's talking to the virtual network in (swarm particulary)
+- so when you are in a same virtual network they are talking to virtual network and swarm automatically balances the load 
+- when external traffic incoming to published port , it can hit any of the node published port it's listening ,then it will reroute the traffic to exact node 
+- we didn't have to enable this , it's all by default swarm config
+
+- This is stateless load balancing
+- This Load balancer is operate at OSI (layer3 (TCP) ,not layer 4 DNS
+- If you want to run a website at a same port,then you have a problem:
+	- To solve this issue we can use :
+	- Nginx or HAProxy LB proxy, or:
+- Docker enterprise edition have that capabilities of web proxy,
+
+	
+
+### let's see routing mesh in action
+- docker service create --name search --replicas 3 -p 9200:9200 elasticsearch:2
+ 
+- docker service ps search -> check it will distrubting load across all nodes
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ docker swarm join --token SWMTKN-1-3y1i626h6bxrsi751zao7nzn8izo78og20rxlttq12xr8dw4hn-b65mjctl8ytny9ruc2cobk1dm 192.168.0.28:2377
 
 
 ### Learning >>>
