@@ -275,7 +275,7 @@ container)?
 
 ### create a 3 node swarm cluster
 
-- docker swarm --adevertise-addr <manager-ip> -> to make this node manager / return a manager token to join other node into the network
+- docker swarm init --adevertise-addr <manager-ip> -> to make this node manager / return a manager token to join other node into the network
 - docker swarm join --token SWMTKN-1-3y1i626h6bxrsi751zao7nzn8izo78og20rxlttq12xr8dw4hn-b65mjctl8ytny9ruc2cobk1dm 192.168.0.28:2377
 - docker swarm join-token manager -> inorder to join a worker as a manager 
 
@@ -325,19 +325,60 @@ container)?
  
 - docker service ps search -> check it will distrubting load across all nodes
 
+### stacks: production grade compose :
+
+- In 1.13 Docker adds a new layer  of abstraction to swarm called stacks
+- stacks accept compose files as their declarative definition for services,networks,and volumes
+- we use docker stack deploy rather then docker service create
+- stacks manages all those objects for use,including overlay network per stack.Adds stack name to start of their name
+- New deploy : key in compose file. can't do build
+- compose now ignores deploy ,swarm ignores build
+
+### Secrets Storage :
+- Easiest "secure" solution for storing secrets in swarm 
+- What is a Secret?
+   - username and passwords
+   - TLS certificates and keys
+   - SSH keys
+   - any data you would prefer not be "on front page of news"
+- As of docker 1.13.0 Swarm Raft DB is encrypted on disk
+- Only stored on disk on Manger nodes
+- Default is Manager and Workers "control plane" is TLS+Mutual AUth
+- Secrets are first stored in Swarm, then assigned to a Service
+- Only containers in assigned Service can see them
+- They look like files in container but are actually in-memory fs
+- ./run/secrets/<secret_name> or
+- /run/secrets/<secret_alias>
+- Local docker-compose can use file based secrets,but not secure
+
+### Swarm App Lifecycle :
+- Single set of compose files for:
+- Local docker-compose up development environment
+- Remote docker-compose up CI environment
+- Remote docker stack deploy production environment
+- Note:docker-compose -f a.yml -f b.yml config mostly works
+- Note:Compose extends:(may be not work with stack)
+
+- Swarm updates examples:
+  - Just update the image used to a newer version
+  - docker service update --image myapp:1.2.1 <servicename>
+- Adding an environment variable and remove a port
+  - docker service update --env-add NODE_ENV=production --publish-rm 8080
+- Change number of replicas of two services
+  - docker service scale web=8 api=6
+- Swarm updates in stack files
+- same command,just edit the YAML file,then
+- docker stack deploy -c file.yml <stackname>
+- Docker healthcheck commands:
+  - It expects exit 0 (ok) or exit 1 (error)
+  - Three container states:starting,healthy,unhealthy
+  
 
 
 
 
- docker swarm join --token SWMTKN-1-3y1i626h6bxrsi751zao7nzn8izo78og20rxlttq12xr8dw4hn-b65mjctl8ytny9ruc2cobk1dm 192.168.0.28:2377
 
 
 ### Learning >>>
-
-- How to start using docker
-- why we use docker
-- how to dockerize django app
-- how to dockerize any app
-- what are the benefits and disadvantage of docker
 - what is kubernates and how we use it with docker 
-- what is nginx- its a webserver,load balancer,http cache,reverse proxy
+
